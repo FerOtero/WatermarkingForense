@@ -6,7 +6,7 @@ from pathlib import Path
 
 class YuvVideo:
     def __init__(self, name: Path, width: int, heigth:int, framerate: float, nframes = 0):
-        self._name = name
+        self._name = Path(name)
         self._width = width
         self._heigth = heigth
         if os.path.exists(name):
@@ -43,9 +43,13 @@ class YuvVideo:
             return self._size
         return self._size
 
-    def YUV2ts (self):
+    def YUV2ts (self, heigth = 0 , width = 0, qp = 0 ):
         outputPath = f"{self._name.parents[0]}/{self._name.stem}.ts"
-        sp.run(f'ffmpeg -s {int(self._width)}x{int(self._heigth)} -r {self._framerate} -i {self._name} -c:v libx264 -preset ultrafast -r {self._framerate} -qp 0 {outputPath}')
+        if (heigth == 0 and width == 0):
+            sp.run(f'ffmpeg -s {int(self._width)}x{int(self._heigth)} -r {self._framerate} -i {self._name} -c:v libx264 -preset ultrafast -r {self._framerate} -qp {qp} {outputPath}')
+        else:
+            sp.run(f'ffmpeg -s {int(width)}x{int(heigth)} -r {self._framerate} -i {self._name} -c:v libx264 -preset ultrafast -r {self._framerate} -qp {qp} {outputPath}')
+    
         outputVideo = Video(outputPath)
         return outputVideo
 
@@ -53,7 +57,7 @@ class YuvVideo:
     
 class Video:
     def __init__(self, name: Path):
-        self._name = name
+        self._name = Path(name)
         self.__video = cv2.VideoCapture(str(self._name))
         if self.__video.isOpened():
             self._width = self.__video.get(cv2.CAP_PROP_FRAME_WIDTH)
@@ -63,11 +67,11 @@ class Video:
             print ("Video not found at this address:", sys.exc_info()[0])
             raise 
     
-    def Video2YUV(self, start: int, duration: int):
+    def Video2YUV(self, start=0, duration=0):
         # sp.run('ffmpeg -y -f lavfi -i testsrc=size={}x{}:rate=1 -pix_fmt yuv420p -t 10 {}'.format(width, height, yuv_filename))
         if start!=0 or duration!=0:
-            outputPath = f"{self._name.parents[0]}/{self._name.stem}_start_{start}s_end_{duration}_{int(self._width)}x{int(self._heigth)}.yuv"
-            sp.run(f'ffmpeg -ss {start} -i {self._name} -t {duration} -vcodec rawvideo -pix_fmt yuv420p -filter:v yadif -y {outputPath}')
+            outputPath = f"{self._name.parents[0]}/{self._name.stem}_start_{int(start)}s_end_{int(duration)}_{int(self._width)}x{int(self._heigth)}.yuv"
+            sp.run(f'ffmpeg -ss {int(start)} -i {self._name} -t {int(duration)} -vcodec rawvideo -pix_fmt yuv420p -filter:v yadif -y {outputPath}')
         else:
             outputPath = f"{self._name.parents[0]}/{self._name.stem}_{int(self._width)}x{int(self._heigth)}.yuv"
             sp.run(f'ffmpeg -i {self._name} -vcodec rawvideo -pix_fmt yuv420p -filter:v yadif -y {outputPath}')
