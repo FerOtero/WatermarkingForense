@@ -4,8 +4,8 @@ import numpy as np
 from videotools import Video, YuvVideo
 from watermarktools import WatermarkDecoder, WatermarkEncoder
 
-# wmImPath= Path("C:\\Users\\FOM\\Documents\\Development\\WatermarkingForense\\Tests\\mp4Tests\\AsianFusion_VMAFViterbiQualityBasedAdaptor_Trace_0.mp4")
-yuvPath = Path('C:\\Users\\FOM\\Documents\\Development\\WatermarkingForense\\Tests\\ref\\BigBuckBunny_25fps_1920x1080_trimm.yuv')
+
+yuvPath = Path('C:\\Users\\FOM\\Documents\\Development\\WatermarkingForense\\DataSet\\Video\\References_YUV420\\BigBuckBunny_25fps_1920x1080.yuv')
 # reference = Video(wmImPath)
 yuvVideo = YuvVideo(yuvPath, 1920, 1080, 25)
 

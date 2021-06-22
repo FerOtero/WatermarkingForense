@@ -46,7 +46,8 @@ class YuvVideo:
     def YUV2ts (self):
         outputPath = f"{self._name.parents[0]}/{self._name.stem}.ts"
         sp.run(f'ffmpeg -s {int(self._width)}x{int(self._heigth)} -r {self._framerate} -i {self._name} -c:v libx264 -preset ultrafast -r {self._framerate} -qp 0 {outputPath}')
-        return Video (outputPath)
+        outputVideo = Video(outputPath)
+        return outputVideo
 
 
     
