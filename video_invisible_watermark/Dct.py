@@ -17,6 +17,7 @@ class EmbedMaxDct(object):
         self._scales = scales
         self._block = block
 
+    # YUV decoding should be made in watermarktools this function should be kept as simple as possible
     def encode(self, yuvInput: YuvVideo):
         yuvFile = open(yuvInput.name, 'rb')
         YUVoutputPath = f"{yuvInput.name.parents[0]}/{yuvInput.name.stem}_encoded.yuv"
@@ -76,6 +77,31 @@ class EmbedMaxDct(object):
 
         bits = (np.array(avgScores) * 255 > 127)
         return bits
+
+    # YUV decoding should be made in watermarktools this function should be kept as simple as possible
+    # def decode(self, yuvInput:YuvVideo):
+    #     yuvFile = open(yuvInput.name, 'rb')
+    #     for i in range(yuvInput.nframes):
+    #         yuvFrame = np.frombuffer(yuvFile.read(yuvInput.width*yuvInput.heigth*3//2), dtype=np.uint8).reshape((yuvInput.heigth*3//2, yuvInput.width))
+    #         bgr = cv2.cvtColor(yuvFrame, cv2.COLOR_YUV2BGR_I420)
+    #         (row, col, channels) = bgr.shape
+
+    #         yuv = cv2.cvtColor(bgr, cv2.COLOR_BGR2YUV)
+
+    #         scores = [[] for i in range(self._wmLen)]
+    #         for channel in range(2):
+    #             if self._scales[channel] <= 0:
+    #                 continue
+
+    #             ca1,(h1,v1,d1) = pywt.dwt2(yuv[:row//4*4,:col//4*4,channel], 'haar')
+
+    #             scores = self.decode_frame(ca1, self._scales[channel], scores)
+
+    #         avgScores = list(map(lambda l: np.array(l).mean(), scores))
+
+    #         bits = (np.array(avgScores) * 255 > 127)
+    #         result = tuple.append(bits)
+    #     return result
 
     def decode_frame(self, frame, scale, scores):
         (row, col) = frame.shape
