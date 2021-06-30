@@ -44,7 +44,7 @@ class YuvVideo:
         return self._size
 
     def YUV2ts (self, heigth = 0 , width = 0, qp = 0 ):
-        outputPath = f"{self._name.parents[0]}/{self._name.stem}.ts"
+        outputPath = f"{self._name.parents[0]}/{self._name.stem}_qp_{qp}.ts"
         if (heigth == 0 and width == 0):
             sp.run(f'ffmpeg -s {int(self._width)}x{int(self._heigth)} -r {self._framerate} -i {self._name} -c:v libx264 -preset ultrafast -r {self._framerate} -qp {qp} {outputPath}')
         else:
