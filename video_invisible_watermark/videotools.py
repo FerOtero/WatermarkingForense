@@ -15,6 +15,7 @@ class YuvVideo:
         self._width = width
         self._heigth = heigth
         if os.path.exists(name):
+            logger.info(f"YUV exists at: {name}")
             self._size = os.path.getsize(name)
             self._nframes = self._size // (self._width*self._heigth*3 // 2)
         if nframes != 0:
@@ -50,10 +51,15 @@ class YuvVideo:
 
     def YUV2ts (self, heigth = 0 , width = 0, qp = 0 ):
         outputPath = f"{self._name.parents[0]}/{self._name.stem}_qp_{qp}.ts"
+        logger.info(f'Ts will be created at {outputPath}')
         if (heigth == 0 and width == 0):
-            sp.run(f'ffmpeg -s {int(self._width)}x{int(self._heigth)} -r {self._framerate} -i {self._name} -c:v libx264 -preset ultrafast -r {self._framerate} -qp {qp} {outputPath}')
+            commandLine = f'ffmpeg -s {int(self._width)}x{int(self._heigth)} -r {self._framerate} -i {self._name} -c:v libx264 -preset ultrafast -r {self._framerate} -qp {qp} {outputPath}'
+            logger.info(f'FFMPEG CommandLine: {commandLine}')
+            sp.run(commandLine)
         else:
-            sp.run(f'ffmpeg -s {int(width)}x{int(heigth)} -r {self._framerate} -i {self._name} -c:v libx264 -preset ultrafast -r {self._framerate} -qp {qp} {outputPath}')
+            commandLine = f'ffmpeg -s {int(width)}x{int(heigth)} -r {self._framerate} -i {self._name} -c:v libx264 -preset ultrafast -r {self._framerate} -qp {qp} {outputPath}'
+            logger.info(f'FFMPEG CommandLine: {commandLine}')
+            sp.run(commandLine)
     
         outputVideo = Video(outputPath)
         return outputVideo
@@ -75,11 +81,17 @@ class Video:
     def Video2YUV(self, start=0, duration=0):
         # sp.run('ffmpeg -y -f lavfi -i testsrc=size={}x{}:rate=1 -pix_fmt yuv420p -t 10 {}'.format(width, height, yuv_filename))
         if start!=0 or duration!=0:
-            outputPath = f"{self._name.parents[0]}/{self._name.stem}_start_{int(start)}s_end_{int(duration)}_{int(self._width)}x{int(self._heigth)}.yuv"
-            sp.run(f'ffmpeg -ss {int(start)} -i {self._name} -t {int(duration)} -vcodec rawvideo -pix_fmt yuv420p -filter:v yadif -y {outputPath}')
+            outputPath = f"{self._name.parents[0]}/{self._name.stem}_start_{int(start)}s_end_{int(start+duration)}_{int(self._width)}x{int(self._heigth)}.yuv"
+            commandLine = f'ffmpeg -ss {int(start)} -i {self._name} -t {int(duration)} -vcodec rawvideo -pix_fmt yuv420p -filter:v yadif -y {outputPath}'
+            logger.info(f'Ts will be created at {outputPath}')
+            logger.info(f'FFMPEG CommandLine: {commandLine}')
+            sp.run(commandLine)
         else:
             outputPath = f"{self._name.parents[0]}/{self._name.stem}_{int(self._width)}x{int(self._heigth)}.yuv"
-            sp.run(f'ffmpeg -i {self._name} -vcodec rawvideo -pix_fmt yuv420p -filter:v yadif -y {outputPath}')
+            commandLine= f'ffmpeg -i {self._name} -vcodec rawvideo -pix_fmt yuv420p -filter:v yadif -y {outputPath}'
+            logger.info(f'Ts will be created at {outputPath}')
+            logger.info(f'FFMPEG CommandLine: {commandLine}')
+            sp.run(commandLine)
         return YuvVideo(outputPath, self._width, self._heigth, self._framerate)
         
 
