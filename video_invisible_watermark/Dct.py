@@ -10,7 +10,7 @@ from logger import get_logger
 
 log_level = 'DEBUG'
 outputLog = ("C:\\Users\\FOM\\Documents\\Development\\WatermarkingForense\\video_invisible_watermark\\logs\\watermarking.log")
-logger = get_logger(level=log_level, job_id=None, path=outputLog, name='Main')
+logger = get_logger(level=log_level, job_id=None, path=outputLog, name='DCT')
 
 pp = pprint.PrettyPrinter(indent=2)
 
@@ -25,7 +25,7 @@ class EmbedMaxDct(object):
     # YUV decoding should be made in watermarktools this function should be kept as simple as possible
     def encode(self, yuvInput: YuvVideo):
         yuvFile = open(yuvInput.name, 'rb')
-        YUVoutputPath = f"{yuvInput.name.parents[0]}/{yuvInput.name.stem}_encoded.yuv"
+        YUVoutputPath = f"{yuvInput.name.parents[0]}/{yuvInput.name.stem}_watermarked.yuv"
         yuvEncoded = YuvVideo(YUVoutputPath, yuvInput.width, yuvInput.heigth, yuvInput.framerate, yuvInput.nframes)
         newYuv = open(YUVoutputPath, 'ab')
         for i in range(yuvInput.nframes):
@@ -58,7 +58,7 @@ class EmbedMaxDct(object):
             newYuv.write(matCbHalf)
             newYuv.write(matCrHalf)
 
-            logger.info(f"Encoding....{int(i*100/yuvInput.nframes)}%")
+            logger.info(f"Watermarking....{int(i*100/yuvInput.nframes)}%")
 
         yuvFile.close()
         newYuv.close()
