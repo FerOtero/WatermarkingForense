@@ -19,14 +19,15 @@ logger = get_logger(level=log_level, job_id=None, path=outputLog, name='Main')
 # yuvPath = Path('DataSet\\Video\\References_YUV420\\ElFuente1_30fps_1920x1080\\ElFuente1_30fps_1920x1080.yuv')
 # yuvPath = Path('DataSet\\Video\\References_YUV420\\FoxBird_25fps_1920x1080\\FoxBird_25fps_1920x1080.yuv')
 # yuvPath = Path('DataSet\\Video\\References_YUV420\\Tennis_24fps_1920x1080\\Tennis_24fps_1920x1080.yuv')
-yuvs = [Path('DataSet\\Video\\References_YUV420\\BigBuckBunny_25fps_1920x1080\\BigBuckBunny_25fps_1920x1080.yuv'),
-Path('DataSet\\Video\\References_YUV420\\BirdsInCage_30fps_1920x1080\\BirdsInCage_30fps_1920x1080.yuv'),
-Path('DataSet\\Video\\References_YUV420\\CrowdRun_25fps_1920x1080\\CrowdRun_25fps_1920x1080.yuv'),
-Path('DataSet\\Video\\References_YUV420\\ElFuente1_30fps_1920x1080\\ElFuente1_30fps_1920x1080.yuv'),
-Path('DataSet\\Video\\References_YUV420\\FoxBird_25fps_1920x1080\\FoxBird_25fps_1920x1080.yuv'),
-Path('DataSet\\Video\\References_YUV420\\Tennis_24fps_1920x1080\\Tennis_24fps_1920x1080.yuv')]
+# yuvs = [Path('DataSet\\Video\\References_YUV420\\CrowdRun_25fps_1920x1080\\CrowdRun_25fps_1920x1080.yuv'),
+# Path('DataSet\\Video\\References_YUV420\\FoxBird_25fps_1920x1080\\FoxBird_25fps_1920x1080.yuv')]
+yuvs=[Path('DataSet\\Video\\References_YUV420\\BirdsInCage_30fps_1920x1080\\BirdsInCage_30fps_1920x1080.yuv'),
+Path('DataSet\\Video\\References_YUV420\\ElFuente1_30fps_1920x1080\\ElFuente1_30fps_1920x1080.yuv')]
+# yuvs=[Path('DataSet\\Video\\References_YUV420\\Tennis_24fps_1920x1080\\Tennis_24fps_1920x1080.yuv')]
 for yuvPath in yuvs:
-    yuvReference = YuvVideo(yuvPath, 1920, 1080, 25)
+    # yuvReference = YuvVideo(yuvPath, 1920, 1080, 25)
+    yuvReference = YuvVideo(yuvPath, 1920, 1080, 30)
+    # yuvReference = YuvVideo(yuvPath, 1920, 1080, 24)
 
     # Encode Yuv Result
     # 1 Initiate  the encoder and the password
