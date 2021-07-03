@@ -6,6 +6,11 @@ import math
 import pprint
 from videotools import YuvVideo
 from pathlib import Path
+from logger import get_logger
+
+log_level = 'DEBUG'
+outputLog = ("C:\\Users\\FOM\\Documents\\Development\\WatermarkingForense\\video_invisible_watermark\\logs\\watermarking.log")
+logger = get_logger(level=log_level, job_id=None, path=outputLog, name='Main')
 
 pp = pprint.PrettyPrinter(indent=2)
 
@@ -53,7 +58,7 @@ class EmbedMaxDct(object):
             newYuv.write(matCbHalf)
             newYuv.write(matCrHalf)
 
-            print (f"Encoding....{int(i*100/yuvInput.nframes)}%")
+            logger.info(f"Encoding....{int(i*100/yuvInput.nframes)}%")
 
         yuvFile.close()
         newYuv.close()

@@ -3,6 +3,11 @@ import sys
 import os
 import subprocess as sp
 from pathlib import Path
+from logger import get_logger
+
+log_level = 'DEBUG'
+outputLog = ("C:\\Users\\FOM\\Documents\\Development\\WatermarkingForense\\video_invisible_watermark\\logs\\watermarking.log")
+logger = get_logger(level=log_level, job_id=None, path=outputLog, name='VideoTools')
 
 class YuvVideo:
     def __init__(self, name: Path, width: int, heigth:int, framerate: float, nframes = 0):
@@ -64,7 +69,7 @@ class Video:
             self._heigth = self.__video.get(cv2.CAP_PROP_FRAME_HEIGHT)
             self._framerate = self.__video.get(cv2.CAP_PROP_FPS)
         else:
-            print ("Video not found at this address:", sys.exc_info()[0])
+            logger.info("Video not found at this address:", sys.exc_info()[0])
             raise 
     
     def Video2YUV(self, start=0, duration=0):
